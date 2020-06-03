@@ -16,16 +16,36 @@ provider "kubernetes" {
 
 module "my-cluster" {
   source          = "terraform-aws-modules/eks/aws"
-  cluster_name    = "${var.name}"
+  cluster_name    = "${var.name}-eks-cluster"
   cluster_version = "1.16"
   subnets         = module.vpc.private_subnets
   vpc_id          = module.vpc.vpc_id
 
-  worker_groups = [
-    {
-      instance_type        = "${var.instance_type}"
-      asg_max_size         = "${var.max_size}"
-      asg_desired_capacity = "${var.desired_size}"
-    }
-  ]
 }
+
+module "eks-node-group" {
+  source = "umotif-public/eks-node-group/aws"
+  version = "~> 1.0"
+
+  enabled      = true
+  cluster_name = "${var.name}-eks-cluster"
+
+  subnet_ids = module.vpc.private_subnets
+
+  desired_size = 3
+  min_size     = 1
+  max_size     = 5
+
+  instance_types = ["t3.large"]
+
+  ec2_ssh_key = "eks-test"
+
+  kubernetes_labels = {
+    lifecycle = "OnDemand"
+  }
+
+  tags = {
+    Environment = "test"
+  }
+}
+

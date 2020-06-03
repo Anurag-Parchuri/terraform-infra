@@ -6,8 +6,6 @@ variable "public_subnet_numbers" {}
 
 variable "private_subnet_numbers" {}
 
-variable "az" {}
-
 variable "desired_size"{}
 
 variable "max_size"{}
