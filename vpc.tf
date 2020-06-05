@@ -10,7 +10,7 @@ module "vpc" {
                      ]
   
   private_subnet_tags = {
-    "kubernetes.io/cluster/${var.name}" = "shared"
+    "kubernetes.io/cluster/${var.name}-eks-cluster" = "shared"
     "kubernetes.io/role/internal-elb"   = "1"
   }
   
@@ -20,8 +20,8 @@ module "vpc" {
                      ]
 
   public_subnet_tags = {
-    "kubernetes.io/cluster/${var.name}" = "shared"
-    "kubernetes.io/role/elb"            = "1"
+    "kubernetes.io/cluster/${var.name}-eks-cluster" = "shared"
+    "kubernetes.io/role/elb"                        = "1"
   }
 
   enable_nat_gateway = true

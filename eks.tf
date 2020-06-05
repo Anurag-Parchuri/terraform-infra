@@ -26,18 +26,17 @@ module "my-cluster" {
 module "eks-node-group" {
   source = "umotif-public/eks-node-group/aws"
   version = "~> 1.0"
-
-  enabled      = true
-  cluster_name = "${var.name}-eks-cluster"
+  enabled = true
+  cluster_name = data.aws_eks_cluster.cluster.name
 
   subnet_ids = module.vpc.private_subnets
 
-  desired_size = 3
-  min_size     = 1
-  max_size     = 5
+  desired_size = "${var.desired_size}"
+  min_size = 1
+  max_size = "${var.max_size}"
 
-  instance_types = ["t3.large"]
-
+  instance_types = "${var.instance_type}"
+  disk_size = 50
   ec2_ssh_key = "eks-test"
 
   kubernetes_labels = {
@@ -46,6 +45,7 @@ module "eks-node-group" {
 
   tags = {
     Environment = "test"
+    Name = "${data.aws_eks_cluster.cluster.name}-worker-nodes"
   }
 }
 

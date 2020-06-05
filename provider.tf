@@ -4,9 +4,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "yara-terraform-state"
-    key    = "yara-terraform-state-poc/terraformstate.tf"
-    region = "ap-south-1"
+
   }
 }
 
